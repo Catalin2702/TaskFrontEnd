@@ -1,4 +1,21 @@
+:root {
+	--glass-border: .2px solid rgba(255, 255, 255, 0.2);
+	--glass-border-active: .2px solid rgba(255, 255, 255, 0.5);
+	--glass-background: rgba(255, 255, 255, 0.2);
+}
+
+
 body {
 	margin: 0;
 	padding: 0;
+	background: url("assets/media/background.jpg") no-repeat center center fixed;
+	background-size: cover;
+	font-family: 'Roboto', sans-serif;
+}
+
+.glass-effect {
+	background: var(--glass-background);
+	backdrop-filter: blur(10px);
+	border-radius: 10px;
+	border: var(--glass-border);
 }

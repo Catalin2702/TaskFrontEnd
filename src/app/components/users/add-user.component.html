@@ -1,0 +1,18 @@
+<div class="backdrop" (click)="onCancel()"></div>
+<dialog open class="glass-effect">
+	<h2>Add User</h2>
+	<form (ngSubmit)="onSave()">
+		<p>
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" [(ngModel)]="username"/>
+		</p>
+		<p>
+			<label for="email">Email</label>
+			<input id="email" name="email" [(ngModel)]="email">
+		</p>
+		<p class="actions">
+			<button type="button" (click)="onCancel()">Cancel</button>
+			<button type="submit">Create</button>
+		</p>
+	</form>
+</dialog>

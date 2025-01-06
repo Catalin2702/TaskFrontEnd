@@ -1,0 +1,14 @@
+<div class="app">
+	<app-users
+		[users]="users()"
+		[selectedId]="selectedId()"
+		[isFetching]="isUserFetching()"
+		(addUser)="onOpenAddUser()"
+	/>
+	@if(isAddingUser) {
+		<app-add-user
+			(addUser)="onAddUser($event)"
+			(cancel)="onCloseAddUser()"
+		/>
+	}
+</div>
