@@ -1,0 +1,13 @@
+<div class="categories-container glass-effect">
+	<header class="categories-header">
+		<p class="categories-title">Categories</p>
+		<button class="add-category" (click)="{}">Add Category</button>
+	</header>
+	<ul class="categories-list">
+		@for(category of categories; track category.id) {
+			<li>
+				<app-category [category]="category"/>
+			</li>
+		}
+	</ul>
+</div>

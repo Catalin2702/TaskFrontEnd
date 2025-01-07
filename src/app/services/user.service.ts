@@ -15,19 +15,17 @@ export class UserService {
 	loadUsers(ids: number[] = []): Observable<User[]> {
 		const idsStr = ids.join(',');
 		const params = new HttpParams();
-		if (idsStr) {
+		if (idsStr)
 			params.set('ids', idsStr);
-		}
-		return this.http.get<ApiResponse<UsersResponse>>(`${apiUrl}/users`, {params})
-			.pipe(
-				map(response => response.data.users),
-				catchError(() => {
-					return throwError(() => new Error('Failed to fetch users'));
-				})
-			)
+		return this.http.get<ApiResponse<UsersResponse>>(`${apiUrl}/users`, {params}).pipe(
+			map(response => response.data.users || []),
+			catchError(() => {
+				return throwError(() => new Error('Failed to fetch users'));
+			})
+		)
 	}
 
-	addUser(newUser: NewUser) {
+	addUser(newUser: NewUser): Observable<User | null> {
 		return this.http.post<ApiResponse<UserResponse>>(`${apiUrl}/user`, newUser).pipe(
 			map(response => response.data.user),
 			catchError(() => {

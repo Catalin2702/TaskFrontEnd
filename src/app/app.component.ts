@@ -2,23 +2,30 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 
 import {UsersComponent} from './components/users/users.component';
 import {AddUserComponent} from './components/users/add-user.component';
+import {CategoriesComponent} from './components/categories/categories.component';
 import {UserService} from './services/user.service';
-import {NewUser, User} from './models/task.model';
+import {NewUser, User, Category} from './models/task.model';
+import {CategoryService} from './services/category.service';
 
 @Component({
 	selector: 'app-root',
-	imports: [UsersComponent, AddUserComponent],
+	imports: [UsersComponent, AddUserComponent, CategoriesComponent],
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
 	title = 'Tasks FrontEnd';
 	isAddingUser: boolean = false;
+	categoryService: CategoryService = inject(CategoryService);
 	userService: UserService = inject(UserService);
-	userRefreshCounter = -1;
+
 	users = signal<User[]>([]);
-	selectedId = signal<number | undefined>(undefined);
+	selectedUserId = signal<number | undefined>(undefined);
 	isUserFetching = signal<boolean>(false);
+
+	categories = signal<Category[]>([]);
+	selectedCategoryId = signal<number | undefined>(undefined);
+	isCategoryFetching = signal<boolean>(false);
 
 	constructor() {
 		document.title = this.title;
@@ -32,12 +39,40 @@ export class AppComponent implements OnInit {
 		this.isUserFetching.set(true);
 		this.userService.loadUsers().subscribe({
 			next: users => {
-				this.users.set(users);
-				if (users.length)
-					this.selectedId.set(users[0].id);
+				if (users) {
+					this.users.set(users);
+					if (users.length)
+						this.selectedUserId.set(users[0].id);
+				}
+				else {
+					this.users.set([]);
+					this.selectedUserId.set(undefined);
+				}
 			},
+			complete: () => {
+				this.isUserFetching.set(false)
+				this.loadUserCategories();
+			},
+			error: (error: Error) => console.error(error)
+		});
+	}
+
+	loadUserCategories() {
+		this.isCategoryFetching.set(true);
+		if (!this.selectedUserId())
+			return;
+		this.categoryService.loadCategoriesByUserId(this.selectedUserId() || 0).subscribe({
+			next: categories => {
+				if (categories) {
+					this.categories.set(categories);
+					if (categories.length)
+						this.selectedCategoryId.set(categories[0].id);
+					else
+						this.selectedCategoryId.set(undefined);
+				}
+			},
+			complete: () => this.isCategoryFetching.set(false),
 			error: (error: Error) => console.error(error),
-			complete: () => this.isUserFetching.set(false)
 		});
 	}
 
@@ -52,15 +87,19 @@ export class AppComponent implements OnInit {
 		this.isUserFetching.set(true);
 		this.userService.addUser(newUser).subscribe({
 			next: user => {
-				this.users.set([...this.users(), user]);
+				if (user)
+					this.users.set([...this.users(), user]);
 			},
 			complete: () => {
 				this.isAddingUser = false;
 				this.isUserFetching.set(false);
 			},
-			error: (error: Error) => {
-				console.error('Error adding user:', error);
-			}
+			error: (error: Error) => console.error(error),
 		});
+	}
+
+	onSelectUser(id: number) {
+		this.selectedUserId.set(id);
+		this.loadUserCategories();
 	}
 }

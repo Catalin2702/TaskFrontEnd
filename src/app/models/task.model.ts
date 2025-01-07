@@ -15,37 +15,54 @@ interface User extends NewUser{
 	updated: string | null | undefined;
 }
 
-interface Category {
-	id: number;
+interface NewCategory {
 	title: string;
 	description: string;
 	userId: number;
+}
+
+interface Category extends NewCategory {
+	id: number;
 	created: string | null | undefined;
 	updated: string | null | undefined;
 }
 
-interface Task {
-	id: number;
+interface NewTask {
 	title: string;
 	description: string;
 	categoryId: number;
+}
+
+interface Task extends NewTask {
+	id: number;
 	created: string | null | undefined;
 	updated: string | null | undefined;
 }
 
 interface UserResponse {
-	user: User;
+	user: User | null;
 }
 interface UsersResponse {
-	users: User[];
+	users: User[] | null;
+}
+
+interface CategoryResponse {
+	category: Category | null;
+}
+interface CategoriesResponse {
+	categories: Category[] | null;
 }
 
 export type {
 	ApiResponse,
 	NewUser,
 	User,
+	NewCategory,
 	Category,
+	NewTask,
 	Task,
 	UserResponse,
-	UsersResponse
+	UsersResponse,
+	CategoryResponse,
+	CategoriesResponse,
 }

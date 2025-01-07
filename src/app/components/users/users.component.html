@@ -1,8 +1,8 @@
 <div class="users-container glass-effect">
-	<div class="users-header">
+	<header class="users-header">
 		<p class="users-title">Users</p>
 		<button class="add-user" (click)="onAddUser()">Add User</button>
-	</div>
+	</header>
 	<ul class="users-list">
 		@for(user of users; track user.id) {
 			<li [class.active]="isSelected(user.id)" (click)="onUserSelected(user.id)">{{ user?.username }}</li>

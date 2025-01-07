@@ -10,13 +10,13 @@ import {User} from '../../models/task.model';
 })
 export class UsersComponent {
 	@Input({required: true}) users!: User[] | undefined;
-	@Input({required: true}) selectedId!: number | undefined;
+	@Input({required: true}) selectedUserId!: number | undefined;
 	@Input() isFetching!: boolean;
 	@Output() addUser = new EventEmitter<void>();
-	@Output() userSelected = new EventEmitter<number>();
+	@Output() selectUser = new EventEmitter<number>();
 
 	isSelected(id: number): boolean {
-		return this.selectedId === id;
+		return this.selectedUserId === id;
 	}
 
 	onAddUser() {
@@ -24,7 +24,7 @@ export class UsersComponent {
 	}
 
 	onUserSelected(id: number) {
-		this.userSelected.emit(id);
-		this.selectedId = id;
+		this.selectUser.emit(id);
+		this.selectedUserId = id;
 	}
 }

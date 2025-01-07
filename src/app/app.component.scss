@@ -3,4 +3,9 @@
 	flex-direction: row;
 	width: 70%;
 	margin: 5vh auto 0;
+	gap: 3rem;
+
+	#categories {
+		flex-grow: 1;
+	}
 }
